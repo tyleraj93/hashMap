@@ -1,0 +1,27 @@
+{
+    "name": "hashmap",
+    "version": "1.0.0",
+    "description": "",
+    "private": true,
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "webpack serve --open",
+        "build": "webpack"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tyleraj93/hashMap.git"
+    },
+    "author": "Tyler Justice",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/tyleraj93/hashMap/issues"
+    },
+    "homepage": "https://github.com/tyleraj93/hashMap#readme",
+    "devDependencies": {
+        "html-webpack-plugin": "^5.6.0",
+        "webpack": "^5.92.0",
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^5.0.4"
+    }
+}
