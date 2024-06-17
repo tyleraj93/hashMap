@@ -9,6 +9,7 @@ export class HashMap {
         this.sizeCounter = 0;
     }
 
+    // Takes a key and produces a hash code with it.
     hash(key) {
         let hashCode = 0;
 
@@ -19,12 +20,15 @@ export class HashMap {
 
         return hashCode % this.buckets.length;
     }
+
+    // Takes two arguments, the first is a key and the second is a value that is assigned to this key.
     set(key, value) {
+        if (key == null || key == undefined) throw new Error("Key cannot be null or undefined");
         const index = this.hash(key);
         let current = this.buckets[index].head;
         while (current) {
             if (current.data.key === key) {
-                current.data.value = value;
+                current.data.value = value; // If a key already exists, then the old value is overwritten
                 return;
             }
             current = current.next;
@@ -34,22 +38,24 @@ export class HashMap {
         this.sizeCounter++;
 
         if (this.sizeCounter / this.buckets.length > this.loadFactor) {
-            this.resize();
+            this.resize(); // Grows bucket size based on loadFactor
         }
     }
 
+    // Doubles the bucket size and reassigns all stored keys and values
     resize() {
-        let newMap = new HashMap(this.buckets.length * 2);
+        let newMap = new HashMap(this.buckets.length * 2); // Creates a new hash map with double the buckets
         for (const bucket of this.buckets) {
             let current = bucket.head;
             while (current) {
-                newMap.set(current.data.key, current.data.value);
-                current = current.next
+                newMap.set(current.data.key, current.data.value); // Assigns all values from old map to new map
+                current = current.next;
             }
         }
-        this.buckets = newMap.buckets;
+        this.buckets = newMap.buckets; // Overwrites old hash map buckets with the new ones
     }
 
+    //  Takes one argument as a key and returns the value that is assigned to this key.
     get(key) {
         let current = this.buckets[this.hash(key)].head;
         while (current) {
@@ -58,9 +64,10 @@ export class HashMap {
             }
             current = current.next;
         }
-        return null;
+        return null; // If a key is not found, return null.
     }
 
+    // Takes a key as an argument and returns true or false based on whether or not the key is in the hash map.
     has(key) {
         let current = this.buckets[this.hash(key)].head;
         while (current) {
@@ -72,6 +79,9 @@ export class HashMap {
         return false;
     }
 
+    // Takes a key as an argument. If the given key is in the hash map,
+    // it removes the entry with that key and returns true.
+    // If the key isn’t in the hash map, it returns false.
     remove(key) {
         let index = this.hash(key);
         let current = this.buckets[index].head;
@@ -94,43 +104,105 @@ export class HashMap {
         }
         return false;
     }
+
+    //  Returns the number of stored keys in the hash map.
+    length() {
+        let counter = 0;
+        for (const bucket of this.buckets) {
+            let current = bucket.head;
+            while (current !== null) {
+                counter++;
+                current = current.next;
+            }
+        }
+        return counter;
+    }
+
+    // Removes all entries in the hash map.
+    clear() {
+        this.buckets.forEach(bucket => bucket.head = null);
+        this.sizeCounter = 0;
+    }
+
+    // Returns an array containing all the keys inside the hash map.
+    keys() {
+        let keys = [];
+        for (const bucket of this.buckets) {
+            let current = bucket.head;
+            while (current !== null) {
+                keys.push(current.data.key);
+                current = current.next;
+            }
+        }
+        return keys;
+    }
+
+    // Returns an array containing all the values.
+    values() {
+        let values = [];
+        for (const bucket of this.buckets) {
+            let current = bucket.head;
+            while (current !== null) {
+                values.push(current.data.value);
+                current = current.next;
+            }
+        }
+        return values;
+    }
+
+    // Returns an array that contains each key, value pair.
+    entries() {
+        let entries = [];
+        for (const bucket of this.buckets) {
+            let current = bucket.head;
+            while (current !== null) {
+                entries.push([current.data.key, current.data.value]);
+                current = current.next;
+            }
+        }
+        return entries;
+    }
 }
 
-const map = new HashMap();
-map.set("sara", "tyler");
-map.set("kaitlyn", "kaitlyn");
-map.set("apple", "fruit");
-map.set("car", "vehicle");
-map.set("book", "reading");
-map.set("tree", "nature");
-map.set("star", "astronomy");
-map.set("phone", "communication");
-map.set("glass", "container");
-map.set("rasa", "water body");
-map.set("asar", "a third value");
-map.set("mountain", "geography");
-map.set("sara", "urban area");
-map.set("cloud", "weather");
-map.set("pen", "writing tool");
-map.set("shoe", "footwear");
-map.set("moon", "celestial");
-map.set("sun", "star");
-map.set("flower", "plant");
-map.set("river", "freshwater");
+// const map = new HashMap();
+// map.set("sara", "tyler");
+// map.set("kaitlyn", "kaitlyn");
+// map.set("apple", "fruit");
+// map.set("car", "vehicle");
+// map.set("book", "reading");
+// map.set("tree", "nature");
+// map.set("star", "astronomy");
+// map.set("phone", "communication");
+// map.set("glass", "container");
+// map.set("rasa", "water body");
+// map.set("asar", "a third value");
+// map.set("mountain", "geography");
+// map.set("sara", "urban area");
+// map.set("cloud", "weather");
+// map.set("pen", "writing tool");
+// map.set("shoe", "footwear");
+// map.set("moon", "celestial");
+// map.set("sun", "star");
+// map.set("flower", "plant");
+// map.set("river", "freshwater");
 
-map.set("key1", "First");
-map.set("k1ye", "Second");
-map.set("ky1e", "Third");
+// map.set("key1", "First");
+// map.set("k1ye", "Second");
+// map.set("ky1e", "Third");
 
-console.log(`key1 is in ${map.hash("key1")}`);
-console.log(`k1ye is in ${map.hash("k1ye")}`);
-console.log(`ky1e is in ${map.hash("ky1e")}`);
+// console.log(`key1 is in ${map.hash("key1")}`);
+// console.log(`k1ye is in ${map.hash("k1ye")}`);
+// console.log(`ky1e is in ${map.hash("ky1e")}`);
 
-console.log(`pen was in ${map.hash("pen")}`);
-console.log(`rasa was in ${map.hash("rasa")}`);
-console.log(`asar is in ${map.hash("asar")}`)
+// console.log(`pen was in ${map.hash("pen")}`);
+// console.log(`rasa was in ${map.hash("rasa")}`);
+// console.log(`asar is in ${map.hash("asar")}`);
 // map.remove("pen");
 // map.remove("tricycle");
 // map.remove("sara");
-map.remove("key1")
-console.log(map);
+// map.remove("key1");
+// map.clear();
+// console.log(map.keys());
+// console.log(map.values());
+// console.log(map.entries());
+// console.log(map);
