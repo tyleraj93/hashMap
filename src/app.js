@@ -1,6 +1,6 @@
 import { Node, LinkedList } from "./linkedLists/app.js";
 
-export class HashMap {
+class HashMap {
     constructor(initialCapacity = 16) {
         this.buckets = Array(initialCapacity)
             .fill(null)
@@ -163,3 +163,5 @@ export class HashMap {
         return entries;
     }
 }
+
+window.HashMap = HashMap;
